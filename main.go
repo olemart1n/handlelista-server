@@ -15,7 +15,7 @@ func main() {
 	router := gin.Default()
 	client := MistralClient()
 
-	router.GET("/api/recommendation", func(c *gin.Context) {
+	router.GET("/api/prompt1", func(c *gin.Context) {
         recommendation := ""
         recommendation, err := mistralChat(client, prompt1())
         if err != nil {
@@ -51,9 +51,7 @@ func mistralChat(m *mistral.MistralClient, prompt mistral.ChatMessage) (string, 
         fmt.Print(err)
         return "", err
     }
-    if response.Choices[0].Message.Content != "" {
-        fmt.Println(response.Choices[0].Message.Content)
-    } else {
+    if response.Choices[0].Message.Content == "" {
         fmt.Println("Empty response received from Mistral")
     }
     return response.Choices[0].Message.Content, nil
