@@ -19,7 +19,11 @@ func main() {
         recommendation := ""
         recommendation, err := mistralChat(client, prompt1())
         if err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+            c.Set("Content-Type", "application/json")
+            c.JSON(http.StatusServiceUnavailable, gin.H{
+                "error": "Mistral service error",
+            })
+            return
         }
         c.Writer.Header().Set("Content-Type", "application/json")
         c.IndentedJSON(http.StatusOK, recommendation)
